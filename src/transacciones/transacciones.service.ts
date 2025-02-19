@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class TransaccionesService {
+    //Ejemplo de Dto que usare mas adelante
     private respuestaApi = {
         dato: [
             {
