@@ -1,17 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
+import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
+import { UsuarioModelo } from 'src/Modelos/usuario/usuario.model';
 
 @Controller('usuario')
 export class UsuarioController {
-constructor(private usuarioService: UsuarioService) {}
+    constructor(private readonly usuarioService: UsuarioService) {}
 
-    @Get('/iniciarSesion')
-    iniciarSesion(){
-        let resultado = this.usuarioService.iniciarSesion();
-        if(resultado.exito){
-            return resultado;
-        }else{
-            return 'chale no se encontro'
-        }
+    @Post('iniciar-sesion')
+    async iniciarSesion(@Body('nombre') nombre: string, @Body('contrasena') contrasena: string): Promise<RespuestaAPI<UsuarioModelo>>{
+        let respuesta = await this.usuarioService.iniciarSesion(nombre, contrasena);
+        return respuesta;
     }
+
+    
 }
