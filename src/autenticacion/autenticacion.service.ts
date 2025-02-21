@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { DataSource, QueryRunner } from 'typeorm';
 import { UsuarioModelo } from '../Modelos/usuario/usuario.model'; // Tu modelo de usuario
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AutenticacionService {
@@ -18,6 +19,8 @@ export class AutenticacionService {
 
     // Método de validación del usuario
     async validarUsuario(nombre: string, contrasena: string): Promise<RespuestaAPI<UsuarioModelo>> {
+        const saltRounds = 10;
+        let contrasenaHash = await bcrypt.hash(contrasena, saltRounds);
         let respuestaApi: RespuestaAPI<UsuarioModelo> =
         {
             dato: new UsuarioModelo,
@@ -35,7 +38,7 @@ export class AutenticacionService {
 
             await queryRunner.query(
                 `CALL IniciarSesion(?, ?, @p_dato, @p_exito, @p_mensaje);`,
-                [nombre, contrasena]
+                [nombre, contrasenaHash]
             );
 
             const [respuestaPA] = await queryRunner.query(
@@ -46,9 +49,9 @@ export class AutenticacionService {
 
             exito = respuestaPA.exito == '1';
 
-            if(exito){
+            if (exito) {
                 const datosJsonParse = JSON.parse(respuestaPA.dato);
-                respuestaApi.dato = 
+                respuestaApi.dato =
                 {
                     id: datosJsonParse.id,
                     nombre: datosJsonParse.nombre,
@@ -56,11 +59,11 @@ export class AutenticacionService {
                     contrasena: datosJsonParse.contrasena,
                     fechaRegistro: datosJsonParse.fechaRegistro,
                     fechaActualizacion: datosJsonParse.fechaActualizacion,
-                    token : ''
+                    token: ''
                 };
                 respuestaApi.exito = exito;
                 respuestaApi.mensaje = respuestaPA.mensaje;
-            }else{
+            } else {
                 respuestaApi.dato = null;
                 respuestaApi.exito = exito;
                 respuestaApi.mensaje = respuestaPA.mensaje;
