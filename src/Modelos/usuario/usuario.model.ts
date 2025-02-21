@@ -5,4 +5,5 @@ export class UsuarioModelo {
     contrasena: string;
     fechaRegistro: Date;
     fechaActualizacion: Date;
+    token: string;
   }

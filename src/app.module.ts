@@ -6,6 +6,7 @@ import { IngresosUsuariosModule } from './ingresos-usuarios/ingresos-usuarios.mo
 import { CodigosVerificacionModule } from './codigos-verificacion/codigos-verificacion.module';
 import { CategoriasModule } from './categorias/categorias.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AutenticacionModule } from './autenticacion/autenticacion.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -23,6 +24,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TransaccionesModule, 
     IngresosUsuariosModule, 
     CodigosVerificacionModule, 
-    CategoriasModule],
+    CategoriasModule, AutenticacionModule],
 })
 export class AppModule { }
