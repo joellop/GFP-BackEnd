@@ -1,7 +1,8 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Put } from '@nestjs/common';
 import { AutenticacionService } from './autenticacion.service';
 import { UsuarioModelo } from '../Modelos/usuario/usuario.model';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
+import { CambioContrasena } from 'src/Modelos/usuario/contrasena.model';
 
 @Controller('autenticacion')
 export class AutenticacionController {
@@ -9,13 +10,29 @@ export class AutenticacionController {
 
     // Endpoint para login
     @Post()
-    async iniciarSesion(@Body() usuario: UsuarioModelo) : Promise<RespuestaAPI<UsuarioModelo>> {
-        let resultado = await this.autenticacionService.validarUsuario(usuario.nombre, usuario.contrasena);
-        if(resultado.exito){
-            const tokenObtenido = await this.autenticacionService.obtenerToken(resultado);
-            resultado.dato != null ? resultado.dato.token = tokenObtenido.token : null;
+    async iniciarSesion(@Body() usuario: UsuarioModelo): Promise<RespuestaAPI<UsuarioModelo>> {
+        let usuarioEncontrado = await this.autenticacionService.validarUsuario(usuario.nombre);
+        if (usuarioEncontrado.exito) {
+            usuarioEncontrado = await this.autenticacionService.validarContrasena(usuarioEncontrado, usuario.contrasena);
+            if (usuarioEncontrado.exito) {
+                const tokenObtenido = await this.autenticacionService.obtenerToken(usuarioEncontrado);
+                usuarioEncontrado.dato != null ? usuarioEncontrado.dato.token = tokenObtenido.token : null;
+                return usuarioEncontrado;
+            } else {
+                return usuarioEncontrado;
+            }
+        } else {
+            return usuarioEncontrado;
+        }
+    }
+
+    //EndPoint para cambiar contraseña sin loguearse
+    @Put()
+    async cambiarContrasena(@Body() contrasena: CambioContrasena): Promise<RespuestaAPI<number>> {
+        let resultado = await this.autenticacionService.cambiarContrasena(contrasena);
+        if (resultado.exito) {
             return resultado;
-        }else{
+        } else {
             return resultado;
         }
     }

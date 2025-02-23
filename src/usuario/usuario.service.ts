@@ -4,6 +4,7 @@ import { DataSource, QueryRunner } from 'typeorm';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
 import { UsuarioModelo } from 'src/Modelos/usuario/usuario.model';
 import * as bcrypt from 'bcrypt'
+import { CambioContrasena } from 'src/Modelos/usuario/contrasena.model';
 
 @Injectable()
 export class UsuarioService {
@@ -71,6 +72,5 @@ export class UsuarioService {
             await queryRunner.release();
         }
     }
-    
 
 }
