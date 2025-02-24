@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
 import { UsuarioModelo } from 'src/Modelos/usuario/usuario.model';
@@ -10,25 +10,34 @@ import { AutenticacionService } from '../autenticacion/autenticacion.service';
 
 @Controller('usuario')
 export class UsuarioController {
-    constructor(private readonly usuarioService: UsuarioService, private readonly autenticacionService:AutenticacionService) {}
-    
-    @Post()
-    async crearUsuario(@Body() usuario: UsuarioModelo): Promise<RespuestaAPI<UsuarioModelo>>{
-        let resultado = await this.usuarioService.crearUsuario(usuario);
-        return resultado;
-    }
+  constructor(private readonly usuarioService: UsuarioService, private readonly autenticacionService: AutenticacionService) { }
 
-    @UseGuards(JwtAuthGuard)
-    @Put()
-    actualizarUsuario(@Body() usuario: UsuarioModelo) {
-      return { mensaje: 'usuario actualizado' };
-    }
+  @Post()
+  async crearUsuario(@Body() usuario: UsuarioModelo): Promise<RespuestaAPI<UsuarioModelo>> {
+    let resultado = await this.usuarioService.crearUsuario(usuario);
+    return resultado;
+  }
 
-    
-    @UseGuards(JwtAuthGuard)
-    @Put('/CambiarContrasena')
-    async cambiarContrasena(@Body() contrasena: CambioContrasena) {
-      let resultado = await this.autenticacionService.cambiarContrasena(contrasena)
-      return resultado;
-    }
+  @Put('/CambiarContrasena')
+  async cambiarContrasena(@Body() contrasena: CambioContrasena): Promise<RespuestaAPI<number>> {
+    let resultado = await this.autenticacionService.cambiarContrasena(contrasena)
+    return resultado;
+  }
+
+  //EndoPoint para confirmar el codigo
+  @Get()
+  async verificarCodigoConfirmacion() {
+    let resultado = this.autenticacionService
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put()
+  actualizarUsuario(@Body() usuario: UsuarioModelo) {
+    return { mensaje: 'usuario actualizado' };
+  }
+
+
+
+
+
 }

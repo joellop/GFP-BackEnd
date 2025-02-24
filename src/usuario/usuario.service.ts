@@ -10,6 +10,7 @@ import { CambioContrasena } from 'src/Modelos/usuario/contrasena.model';
 export class UsuarioService {
     constructor(private dataSource: DataSource) { }
 
+    //Se realiza ejecucion del procedimiento almacenado [CrearActualizarUsuario] 
     async crearUsuario(usuario: UsuarioModelo): Promise<RespuestaAPI<UsuarioModelo>> {
         const saltRounds = 10;
         usuario.contrasena = await bcrypt.hash(usuario.contrasena, saltRounds);
@@ -28,8 +29,8 @@ export class UsuarioService {
             await queryRunner.startTransaction();
 
             await queryRunner.query(
-                `CALL CrearActualizarUsuario(?, ?, ?, ?, @p_dato, @p_exito, @p_mensaje);`,
-                [usuario.id, usuario.nombre, usuario.email, usuario.contrasena]
+                `CALL CrearActualizarUsuario(?, ?, ?, ?, ?, @p_dato, @p_exito, @p_mensaje);`,
+                [usuario.id, usuario.nombre, usuario.email, usuario.contrasena, false]
             );
 
             const [respuestaPA] = await queryRunner.query(
@@ -40,9 +41,9 @@ export class UsuarioService {
 
             exito = respuestaPA.exito == '1';
 
-            if(exito){
+            if (exito) {
                 const datosJsonParse = JSON.parse(respuestaPA.dato);
-                respuestaApi.dato = 
+                respuestaApi.dato =
                 {
                     id: datosJsonParse.id,
                     nombre: datosJsonParse.nombre,
@@ -53,7 +54,7 @@ export class UsuarioService {
                 };
                 respuestaApi.exito = exito;
                 respuestaApi.mensaje = respuestaPA.mensaje;
-            }else{
+            } else {
                 respuestaApi.dato = null;
                 respuestaApi.exito = exito;
                 respuestaApi.mensaje = respuestaPA.mensaje;
@@ -70,6 +71,56 @@ export class UsuarioService {
             };
         } finally {
             await queryRunner.release();
+            if (respuestaApi.exito) {
+                this.generarCodigoVerificacion(respuestaApi);
+            }
+        }
+    }
+
+    //Cuando se crea un usuario nuevo se ejecuta el procedimiento almacenado [GenerarCodigoVerificacion]
+    async generarCodigoVerificacion(datoUsuario: RespuestaAPI<UsuarioModelo>): Promise<RespuestaAPI<string>> {
+
+        const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
+        let respuestaApi: RespuestaAPI<string> =
+        {
+            dato: '',
+            exito: false,
+            mensaje: ''
+        };
+
+        try {
+            queryRunner.connect();
+            queryRunner.startTransaction();
+
+            await queryRunner.query(
+                `CALL GenerarCodigoVerificacion(?,, @p_dato, @p_exito, @p_mensaje);`,
+                [datoUsuario.dato?.id]
+            );
+
+            const [respuestaPA] = await queryRunner.query(
+                `SELECT @p_dato as dato, @p_exito as exito, @p_mensaje as mensaje;`
+            );
+
+            await queryRunner.commitTransaction();
+
+            if (respuestaPA.exito == '1') {
+                respuestaApi.dato = respuestaPA.dato;
+                respuestaApi.exito = true;
+                respuestaApi.mensaje = respuestaPA.mensaje;
+
+            }else{
+                respuestaApi.dato = null
+                respuestaApi.exito = false;
+                respuestaApi.mensaje = respuestaPA.mensaje;
+            }
+            return respuestaApi;
+        } catch {
+            await queryRunner.rollbackTransaction();
+            return {
+                dato: null,
+                exito: false,
+                mensaje: 'Error al ejecutar el procedimiento almacenado',
+            };
         }
     }
 
