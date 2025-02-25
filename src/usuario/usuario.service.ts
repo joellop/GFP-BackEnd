@@ -121,7 +121,17 @@ export class UsuarioService {
                 exito: false,
                 mensaje: 'Error al ejecutar el procedimiento almacenado',
             };
+        } finally{
+            await queryRunner.release();
+            if (respuestaApi.exito) {
+                
+            }
         }
+    }
+
+    //Api para enviar correo electronico 
+    async enviarCorreo(){
+        
     }
 
 }

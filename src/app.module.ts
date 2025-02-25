@@ -7,6 +7,8 @@ import { CodigosVerificacionModule } from './codigos-verificacion/codigos-verifi
 import { CategoriasModule } from './categorias/categorias.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AutenticacionModule } from './autenticacion/autenticacion.module';
+import { EmailModule } from './email/email.module';
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -19,11 +21,15 @@ import { AutenticacionModule } from './autenticacion/autenticacion.module';
       autoLoadEntities: true,
       synchronize: false
     }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     UsuarioModule, 
     ReglasPorcentualModule, 
     TransaccionesModule, 
     IngresosUsuariosModule, 
     CodigosVerificacionModule, 
-    CategoriasModule, AutenticacionModule],
+    CategoriasModule, AutenticacionModule, EmailModule],
 })
 export class AppModule { }
