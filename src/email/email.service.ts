@@ -16,7 +16,7 @@ export class EmailService {
         });
     }
 
-    async enviarCorreo(destinatario: string, asunto: string, contenido: string): Promise<boolean> {
+    async enviarCorreo(destinatario: string | undefined, asunto: string, contenido: string | null): Promise<boolean> {
         const opcionesCorreo = {
             from: `"${this.configService.get<string>('EMAIL_USER')}`,
             to: destinatario,

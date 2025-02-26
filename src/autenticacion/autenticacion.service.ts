@@ -12,7 +12,7 @@ export class AutenticacionService {
 
     // Método para generar el JWT
     async obtenerToken(respuestaAPI: RespuestaAPI<UsuarioModelo>) {
-        const payload = { nombre: respuestaAPI.dato?.nombre, id: respuestaAPI.dato?.id }; // Aquí 'sub' puede ser el id del usuario.
+        const payload = { nombre: respuestaAPI.dato?.nombre, id: respuestaAPI.dato?.id };
         return {
             token: this.jwtService.sign(payload),
         };

@@ -5,10 +5,11 @@ import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
 import { UsuarioModelo } from 'src/Modelos/usuario/usuario.model';
 import * as bcrypt from 'bcrypt'
 import { CambioContrasena } from 'src/Modelos/usuario/contrasena.model';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class UsuarioService {
-    constructor(private dataSource: DataSource) { }
+    constructor(private dataSource: DataSource, private readonly emailService: EmailService) { }
 
     //Se realiza ejecucion del procedimiento almacenado [CrearActualizarUsuario] 
     async crearUsuario(usuario: UsuarioModelo): Promise<RespuestaAPI<UsuarioModelo>> {
@@ -78,7 +79,7 @@ export class UsuarioService {
     }
 
     //Cuando se crea un usuario nuevo se ejecuta el procedimiento almacenado [GenerarCodigoVerificacion]
-    async generarCodigoVerificacion(datoUsuario: RespuestaAPI<UsuarioModelo>): Promise<RespuestaAPI<string>> {
+    async generarCodigoVerificacion(datoUsuario: RespuestaAPI<UsuarioModelo>): Promise<void> {
 
         const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
         let respuestaApi: RespuestaAPI<string> =
@@ -113,25 +114,20 @@ export class UsuarioService {
                 respuestaApi.exito = false;
                 respuestaApi.mensaje = respuestaPA.mensaje;
             }
-            return respuestaApi;
         } catch {
             await queryRunner.rollbackTransaction();
-            return {
-                dato: null,
-                exito: false,
-                mensaje: 'Error al ejecutar el procedimiento almacenado',
-            };
         } finally{
             await queryRunner.release();
             if (respuestaApi.exito) {
-                
+                this.enviarCorreo(datoUsuario.dato?.email, respuestaApi.dato);
             }
         }
     }
 
     //Api para enviar correo electronico 
-    async enviarCorreo(){
-        
+    async enviarCorreo(destinatario: string | undefined, codigoGenerado: string |null) : Promise<boolean>{
+        const correoEnviado = await this.emailService.enviarCorreo(destinatario, 'Codigo de verificación', codigoGenerado);
+        return correoEnviado;
     }
 
 }
