@@ -72,14 +72,11 @@ export class UsuarioService {
             };
         } finally {
             await queryRunner.release();
-            if (respuestaApi.exito) {
-                this.generarCodigoVerificacion(respuestaApi);
-            }
         }
     }
 
     //Cuando se crea un usuario nuevo se ejecuta el procedimiento almacenado [GenerarCodigoVerificacion]
-    async generarCodigoVerificacion(datoUsuario: RespuestaAPI<UsuarioModelo>): Promise<void> {
+    async generarCodigoVerificacion(datoUsuario: RespuestaAPI<UsuarioModelo>): Promise<RespuestaAPI<string>> {
 
         const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
         let respuestaApi: RespuestaAPI<string> =
@@ -94,7 +91,7 @@ export class UsuarioService {
             queryRunner.startTransaction();
 
             await queryRunner.query(
-                `CALL GenerarCodigoVerificacion(?,, @p_dato, @p_exito, @p_mensaje);`,
+                `CALL GenerarCodigoVerificacion(?, @p_dato, @p_exito, @p_mensaje);`,
                 [datoUsuario.dato?.id]
             );
 
@@ -109,25 +106,39 @@ export class UsuarioService {
                 respuestaApi.exito = true;
                 respuestaApi.mensaje = respuestaPA.mensaje;
 
-            }else{
+            } else {
                 respuestaApi.dato = null
                 respuestaApi.exito = false;
                 respuestaApi.mensaje = respuestaPA.mensaje;
             }
+            return respuestaApi;
         } catch {
             await queryRunner.rollbackTransaction();
-        } finally{
+            respuestaApi.dato = null
+            respuestaApi.exito = false;
+            respuestaApi.mensaje = 'Ocurrio un error al generar el codigo de verificación';
+            return respuestaApi;
+        } finally {
             await queryRunner.release();
-            if (respuestaApi.exito) {
-                this.enviarCorreo(datoUsuario.dato?.email, respuestaApi.dato);
-            }
         }
     }
 
     //Api para enviar correo electronico 
-    async enviarCorreo(destinatario: string | undefined, codigoGenerado: string |null) : Promise<boolean>{
-        const correoEnviado = await this.emailService.enviarCorreo(destinatario, 'Codigo de verificación', codigoGenerado);
-        return correoEnviado;
+    async enviarCorreo(datosUsuario: RespuestaAPI<UsuarioModelo>, codigoGenerado: RespuestaAPI<string>): Promise<RespuestaAPI<boolean>> {
+        const correoEnviado = await this.emailService.enviarCorreo(datosUsuario.dato?.email, 'Codigo de verificación', codigoGenerado.dato);
+        if (correoEnviado) {
+            return {
+                dato: correoEnviado,
+                exito: true,
+                mensaje: 'Correo Enviado'
+            }
+        } else {
+            return {
+                dato: correoEnviado,
+                exito: false,
+                mensaje: 'Correo no enviado'
+            }
+        }
     }
 
 }

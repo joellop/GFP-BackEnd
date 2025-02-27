@@ -27,10 +27,8 @@ export class EmailService {
 
         try {
             await this.transporter.sendMail(opcionesCorreo);
-            console.log('📧 Correo enviado con éxito');
             return true;
         } catch (error) {
-            console.error('❌ Error al enviar el correo:', error);
             return false;
         }
     }

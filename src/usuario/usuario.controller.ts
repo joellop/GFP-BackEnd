@@ -12,10 +12,28 @@ import { AutenticacionService } from '../autenticacion/autenticacion.service';
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService, private readonly autenticacionService: AutenticacionService) { }
 
-  @Post()
-  async crearUsuario(@Body() usuario: UsuarioModelo): Promise<RespuestaAPI<UsuarioModelo>> {
-    let resultado = await this.usuarioService.crearUsuario(usuario);
-    return resultado;
+  @Post('/crearUsuario')
+  async crearUsuario(@Body() usuario: UsuarioModelo): Promise<RespuestaAPI<any>> {
+    let usuarioCreado = await this.usuarioService.crearUsuario(usuario);
+    console.log('usuario ==>', usuarioCreado);
+    let correoEnviado: RespuestaAPI<boolean> = { dato: false, exito: false, mensaje: '' };
+    if (usuarioCreado.exito) {
+      let codigoGenerado = await this.usuarioService.generarCodigoVerificacion(usuarioCreado);
+      console.log('codigo generado ==>', codigoGenerado);
+      if (codigoGenerado.exito) {
+        correoEnviado = await this.usuarioService.enviarCorreo(usuarioCreado, codigoGenerado);
+        console.log('correo enviado ==>', correoEnviado);
+      }
+    }
+    if (usuarioCreado.exito) {
+      if(!correoEnviado.exito){
+        return correoEnviado;
+      }else{
+        return correoEnviado;
+      }
+    }else{
+      return usuarioCreado;
+    }
   }
 
   @Put('/CambiarContrasena')
