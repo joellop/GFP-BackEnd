@@ -26,11 +26,7 @@ export class UsuarioController {
       }
     }
     if (usuarioCreado.exito) {
-      if(!correoEnviado.exito){
-        return correoEnviado;
-      }else{
-        return correoEnviado;
-      }
+      return correoEnviado;
     }else{
       return usuarioCreado;
     }
