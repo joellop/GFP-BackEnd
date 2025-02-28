@@ -1,10 +1,9 @@
 import { Catch, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { DataSource, QueryRunner } from 'typeorm';
-import { UsuarioModelo } from '../Modelos/usuario/usuario.model'; // Tu modelo de usuario
+import { CambioContrasena, UsuarioModelo } from '../Modelos/usuario/usuario.model'; // Tu modelo de usuario
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
 import * as bcrypt from 'bcrypt';
-import { CambioContrasena } from 'src/Modelos/usuario/contrasena.model';
 
 @Injectable()
 export class AutenticacionService {

@@ -4,7 +4,6 @@ import { DataSource, QueryRunner } from 'typeorm';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
 import { UsuarioModelo } from 'src/Modelos/usuario/usuario.model';
 import * as bcrypt from 'bcrypt'
-import { CambioContrasena } from 'src/Modelos/usuario/contrasena.model';
 import { EmailService } from 'src/email/email.service';
 
 @Injectable()
@@ -68,31 +67,28 @@ export class UsuarioService {
             return {
                 dato: null,
                 exito: false,
-                mensaje: 'Error al ejecutar el procedimiento almacenado',
+                mensaje: 'Error: ' + error,
             };
         } finally {
             await queryRunner.release();
         }
     }
 
-    //Cuando se crea un usuario nuevo se ejecuta el procedimiento almacenado [GenerarCodigoVerificacion]
-    async generarCodigoVerificacion(datoUsuario: RespuestaAPI<UsuarioModelo>): Promise<RespuestaAPI<string>> {
-
-        const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
-        let respuestaApi: RespuestaAPI<string> =
-        {
-            dato: '',
+    async actualizarUsuario(usuario: UsuarioModelo): Promise<RespuestaAPI<UsuarioModelo>> {
+        let respuestaApi: RespuestaAPI<UsuarioModelo> = {
+            dato: new UsuarioModelo,
             exito: false,
             mensaje: ''
-        };
+        }
 
+        const queryRunner: QueryRunner = this.dataSource.createQueryRunner()
         try {
-            queryRunner.connect();
-            queryRunner.startTransaction();
+            await queryRunner.connect();
+            await queryRunner.startTransaction();
 
             await queryRunner.query(
-                `CALL GenerarCodigoVerificacion(?, @p_dato, @p_exito, @p_mensaje);`,
-                [datoUsuario.dato?.id]
+                `CALL CrearActualizarUsuario(?, ?, ?, ?, ?, @p_dato, @p_exito, @p_mensaje);`,
+                [usuario.id, usuario.nombre, usuario.email, usuario.contrasena, true]
             );
 
             const [respuestaPA] = await queryRunner.query(
@@ -100,45 +96,40 @@ export class UsuarioService {
             );
 
             await queryRunner.commitTransaction();
+            
 
             if (respuestaPA.exito == '1') {
-                respuestaApi.dato = respuestaPA.dato;
+                const datosJsonParse = JSON.parse(respuestaPA.dato);
+                respuestaApi.dato =
+                {
+                    id: datosJsonParse.id,
+                    nombre: datosJsonParse.nombre,
+                    email: datosJsonParse.email,
+                    contrasena: datosJsonParse.contrasena,
+                    fechaRegistro: datosJsonParse.fechaRegistro,
+                    fechaActualizacion: datosJsonParse.fechaActualizacion
+                };
                 respuestaApi.exito = true;
                 respuestaApi.mensaje = respuestaPA.mensaje;
-
             } else {
-                respuestaApi.dato = null
+                respuestaApi.dato = null;
                 respuestaApi.exito = false;
                 respuestaApi.mensaje = respuestaPA.mensaje;
             }
             return respuestaApi;
-        } catch {
+        } catch (error) {
             await queryRunner.rollbackTransaction();
-            respuestaApi.dato = null
-            respuestaApi.exito = false;
-            respuestaApi.mensaje = 'Ocurrio un error al generar el codigo de verificación';
-            return respuestaApi;
+            return {
+                dato: null,
+                exito: false,
+                mensaje: 'Error: ' + error,
+            };
         } finally {
             await queryRunner.release();
         }
     }
 
-    //Api para enviar correo electronico 
-    async enviarCorreo(datosUsuario: RespuestaAPI<UsuarioModelo>, codigoGenerado: RespuestaAPI<string>): Promise<RespuestaAPI<boolean>> {
-        const correoEnviado = await this.emailService.enviarCorreo(datosUsuario.dato?.email, 'Codigo de verificación', codigoGenerado.dato);
-        if (correoEnviado) {
-            return {
-                dato: correoEnviado,
-                exito: true,
-                mensaje: 'Correo Enviado'
-            }
-        } else {
-            return {
-                dato: correoEnviado,
-                exito: false,
-                mensaje: 'Correo no enviado'
-            }
-        }
-    }
+
+
 
 }

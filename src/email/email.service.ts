@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
+import { EmailModel } from 'src/Modelos/email/email.model';
+import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
 
 @Injectable()
 export class EmailService {
@@ -16,20 +18,34 @@ export class EmailService {
         });
     }
 
-    async enviarCorreo(destinatario: string | undefined, asunto: string, contenido: string | null): Promise<boolean> {
+    async enviarCorreo(email: EmailModel): Promise<RespuestaAPI<null>> {
+        let respuestaApi: RespuestaAPI<null> = {
+            dato: null,
+            exito: false,
+            mensaje: '' 
+        }
         const opcionesCorreo = {
             from: `"${this.configService.get<string>('EMAIL_USER')}`,
-            to: destinatario,
-            subject: asunto,
-            text: contenido,
-            html: `<p>${contenido}</p>`,
+            to: email.para,
+            subject: email.asunto,
+            text: email.contenido,
+            html: `<h1>Este es su codigo de seguridad</h1> 
+            <br> 
+            <p>Tiene aproximadamente 5 minutos para validar el codigo</p>
+            <br>
+            <h1><strong>${email.contenido}</strong></h1>`,
         };
 
         try {
             await this.transporter.sendMail(opcionesCorreo);
-            return true;
+            respuestaApi.exito = true;
+            respuestaApi.mensaje = 'Correo enviado con éxito';
+            return respuestaApi;
+
         } catch (error) {
-            return false;
+            respuestaApi.exito = false;
+            respuestaApi.mensaje = 'Error al enviar el correo: ' + error;
+            return respuestaApi;
         }
     }
 }

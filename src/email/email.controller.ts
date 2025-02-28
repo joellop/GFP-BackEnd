@@ -1,0 +1,16 @@
+import { Body, Controller, Post } from '@nestjs/common';
+import { EmailService } from './email.service';
+import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
+import { EmailModel } from 'src/Modelos/email/email.model';
+
+@Controller('email')
+export class EmailController {
+
+    constructor(private readonly emailService: EmailService) {}
+
+    @Post('/enviarEmail')
+    async enviarEmail(@Body() email: EmailModel):Promise<RespuestaAPI<null>>{
+        let respuesta = this.emailService.enviarCorreo(email);
+        return respuesta;
+    }
+}
