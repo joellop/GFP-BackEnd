@@ -6,7 +6,6 @@ import { AutenticacionService } from 'src/autenticacion/autenticacion.service';
 import { JwtStrategy } from 'src/autenticacion/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { EmailModule } from 'src/email/email.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([]),
@@ -17,8 +16,7 @@ import { EmailModule } from 'src/email/email.module';
       secret: configService.get<string>('SECRET_KEY'),
       signOptions: { expiresIn: '60m' },
     })
-  }),
-  EmailModule
+  })
 ],
   controllers: [UsuarioController],
   providers: [UsuarioService, AutenticacionService, JwtStrategy]

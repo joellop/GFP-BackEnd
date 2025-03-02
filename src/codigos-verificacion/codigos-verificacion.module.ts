@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
 import { CodigosVerificacionController } from './codigos-verificacion.controller';
 import { CodigosVerificacionService } from './codigos-verificacion.service';
-import { AutenticacionModule } from 'src/autenticacion/autenticacion.module';
 
 @Module({
-  imports: [AutenticacionModule],
   controllers: [CodigosVerificacionController],
   providers: [CodigosVerificacionService]
 })

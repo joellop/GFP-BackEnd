@@ -18,7 +18,7 @@ export class UsuarioController {
   }
   
   @UseGuards(JwtAuthGuard)
-  @Put()
+  @Put('/actualizarContrasena')
   async actualizarUsuario(@Body() usuario: UsuarioModelo): Promise<RespuestaAPI<UsuarioModelo>> {
     let respuesta = await this.usuarioService.actualizarUsuario(usuario);
     return respuesta;
@@ -29,10 +29,5 @@ export class UsuarioController {
     let resultado = await this.autenticacionService.cambiarContrasena(contrasena)
     return resultado;
   }
-
-
-
-
-
 
 }

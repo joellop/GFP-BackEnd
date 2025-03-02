@@ -85,12 +85,12 @@ export class CodigosVerificacionService {
             await queryRunner.startTransaction();
 
             await queryRunner.query(
-                `CALL VerificarCodigoVerificacion(?, ?, @p_dato, @p_exito, @p_mensaje);`,
+                `CALL VerificarCodigoVerificacion(?, ?, @p_exito, @p_mensaje);`,
                 [datoCodigo.usuarioId, datoCodigo.codigo]
             );
 
             const [respuestaPA] = await queryRunner.query(
-                `SELECT @p_dato as dato, @p_exito as exito, @p_mensaje as mensaje;`
+                `SELECT @p_exito as exito, @p_mensaje as mensaje;`
             );
 
             await queryRunner.commitTransaction();

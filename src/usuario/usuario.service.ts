@@ -8,7 +8,7 @@ import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class UsuarioService {
-    constructor(private dataSource: DataSource, private readonly emailService: EmailService) { }
+    constructor(private dataSource: DataSource) { }
 
     //Se realiza ejecucion del procedimiento almacenado [CrearActualizarUsuario] 
     async crearUsuario(usuario: UsuarioModelo): Promise<RespuestaAPI<UsuarioModelo>> {
