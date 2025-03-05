@@ -18,13 +18,13 @@ export class UsuarioController {
   }
   
   @UseGuards(JwtAuthGuard)
-  @Put('/actualizarContrasena')
+  @Put('/actualizarUsuario')
   async actualizarUsuario(@Body() usuario: UsuarioModelo): Promise<RespuestaAPI<UsuarioModelo>> {
     let respuesta = await this.usuarioService.actualizarUsuario(usuario);
     return respuesta;
   }
   
-  @Put('/CambiarContrasena')
+  @Put('/cambiarContrasena')
   async cambiarContrasena(@Body() contrasena: CambioContrasena): Promise<RespuestaAPI<number>> {
     let resultado = await this.autenticacionService.cambiarContrasena(contrasena)
     return resultado;

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseDatePipe, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/autenticacion/jwt-auth.guard';
 import { IngresosUsuariosService } from './ingresos-usuarios.service';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
@@ -11,10 +11,7 @@ export class IngresosUsuariosController {
     constructor(private readonly ingresosUsuariosService: IngresosUsuariosService){}
 
     @Get('/obtenerIngresosUsuario/:usuarioId/:fecha')
-    async obtenerIngresosUsuario(@Param('usuarioId') usuarioId: number, @Param('fecha') fecha: Date): Promise<RespuestaAPI<IngresosUsuario>>{
-        console.log('ID del usuario ==>',usuarioId);
-        console.log('Fecha del usuario ==>', fecha);
-
+    async obtenerIngresosUsuario(@Param('usuarioId', ParseIntPipe) usuarioId: number, @Param('fecha', new ParseDatePipe) fecha: Date): Promise<RespuestaAPI<IngresosUsuario>>{
         let resultado = await this.ingresosUsuariosService.obtenerIngresosUsuario(usuarioId, fecha);
         return resultado;
     }
