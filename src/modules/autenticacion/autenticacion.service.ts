@@ -1,7 +1,7 @@
-import { Catch, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { DataSource, QueryRunner } from 'typeorm';
-import { CambioContrasena, UsuarioModelo } from '../Modelos/usuario/usuario.model'; // Tu modelo de usuario
+import { CambioContrasena, UsuarioModelo } from '../usuario/dtos/usuario.dto';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
 import * as bcrypt from 'bcrypt';
 

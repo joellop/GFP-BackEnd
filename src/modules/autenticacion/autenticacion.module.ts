@@ -3,7 +3,7 @@ import { AutenticacionService } from './autenticacion.service';
 import { AutenticacionController } from './autenticacion.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [

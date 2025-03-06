@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { emit } from 'process';
-import { IngresosUsuario, IngresoUsuarioPorFecha } from 'src/Modelos/ingresos-usuario/ingresos-usuario.model';
+import { IngresosUsuario } from './dtos/ingresos-usuario.dto';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
 import { DataSource, QueryRunner } from 'typeorm';
 

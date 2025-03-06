@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ReglasPorcentualModel } from 'src/Modelos/reglas-porcentual/reglas-porcentual.model';
+import { ReglasPorcentualModel } from './dtos/reglas-porcentual.dto';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
 import { DataSource, QueryRunner } from 'typeorm';
 

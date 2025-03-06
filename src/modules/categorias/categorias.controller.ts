@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuard
 import { CategoriasService } from './categorias.service';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
 import { Categorias } from './dtos/categoria.dto';
-import { JwtAuthGuard } from 'src/autenticacion/jwt-auth.guard';
+import { JwtAuthGuard } from '../autenticacion/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
 @Controller('categorias')

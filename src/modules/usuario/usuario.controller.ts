@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
-import { CambioContrasena, UsuarioModelo } from 'src/Modelos/usuario/usuario.model';
+import { CambioContrasena, UsuarioModelo } from './dtos/usuario.dto';
 import { JwtAuthGuard } from '../autenticacion/jwt-auth.guard';
 import { AutenticacionService } from '../autenticacion/autenticacion.service';
 

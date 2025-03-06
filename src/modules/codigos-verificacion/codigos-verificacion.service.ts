@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CodigoVerificacion } from 'src/Modelos/codigo-verificacion/codigo-verificacion.model';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
 import { DataSource, QueryRunner } from 'typeorm';
+import { CodigoVerificacion } from './dtos/codigo-verificacion.dto';
 
 @Injectable()
 export class CodigosVerificacionService {

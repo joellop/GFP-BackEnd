@@ -2,10 +2,11 @@ import { Module } from '@nestjs/common';
 import { UsuarioController } from './usuario.controller';
 import { UsuarioService } from './usuario.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AutenticacionService } from 'src/autenticacion/autenticacion.service';
-import { JwtStrategy } from 'src/autenticacion/jwt.strategy';
+
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
+import { AutenticacionService } from '../autenticacion/autenticacion.service';
+import { JwtStrategy } from '../autenticacion/jwt.strategy';
 
 @Module({
   imports: [TypeOrmModule.forFeature([]),

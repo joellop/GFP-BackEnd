@@ -2,9 +2,8 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, QueryRunner } from 'typeorm';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
-import { UsuarioModelo } from 'src/Modelos/usuario/usuario.model';
+import { UsuarioModelo } from './dtos/usuario.dto';
 import * as bcrypt from 'bcrypt'
-import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class UsuarioService {

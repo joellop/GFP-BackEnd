@@ -1,7 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { EmailService } from './email.service';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
-import { EmailModel } from 'src/Modelos/email/email.model';
+import { EmailModel } from './dtos/email.dto';
+
 
 @Controller('email')
 export class EmailController {

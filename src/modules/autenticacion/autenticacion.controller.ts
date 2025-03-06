@@ -1,8 +1,8 @@
 import { Controller, Post, Body, Put, Get } from '@nestjs/common';
 import { AutenticacionService } from './autenticacion.service';
-import { UsuarioModelo } from '../Modelos/usuario/usuario.model';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
-import { get } from 'http';
+import { UsuarioModelo } from '../usuario/dtos/usuario.dto';
+
 
 @Controller('autenticacion')
 export class AutenticacionController {

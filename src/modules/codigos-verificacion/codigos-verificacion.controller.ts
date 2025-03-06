@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CodigosVerificacionService } from './codigos-verificacion.service';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
-import { CodigoVerificacion } from 'src/Modelos/codigo-verificacion/codigo-verificacion.model';
+import { CodigoVerificacion } from './dtos/codigo-verificacion.dto';
+
 
 @Controller('codigos-verificacion')
 export class CodigosVerificacionController {

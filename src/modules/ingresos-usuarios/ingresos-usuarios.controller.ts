@@ -1,9 +1,8 @@
 import { Body, Controller, Get, Param, ParseDatePipe, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/autenticacion/jwt-auth.guard';
 import { IngresosUsuariosService } from './ingresos-usuarios.service';
 import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
-import { IngresosUsuario, IngresoUsuarioPorFecha } from 'src/Modelos/ingresos-usuario/ingresos-usuario.model';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../autenticacion/jwt-auth.guard';
+import { IngresosUsuario } from './dtos/ingresos-usuario.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('ingresos-usuarios')
