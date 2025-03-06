@@ -7,6 +7,46 @@ import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
 export class CategoriasService {
     constructor(private readonly dataSource: DataSource) { }
 
+    async obtenerCategoriaUsuario(usuarioId: number): Promise<RespuestaAPI<Categorias[]>>{
+        let respuestaAPI: RespuestaAPI<Categorias[]>  = {
+            dato: [],
+            exito: false,
+            mensaje:''
+        }
+        const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
+
+        try{
+            await queryRunner.connect();
+            await queryRunner.startTransaction();
+            await queryRunner.query(
+                'CALL ObtenerCategoriasDelUsuario(?, @p_dato, @p_exito, @p_mensaje);', 
+                [usuarioId]
+            );
+            const [respuestaPA] = await queryRunner.query(
+                'SELECT @p_dato as dato, @p_exito as exito, @p_mensaje as mensaje'
+            );
+
+            await queryRunner.commitTransaction();
+
+            if(respuestaPA.exito == '1'){
+                const datoJsonParse = JSON.parse(respuestaPA.dato);
+                respuestaAPI.dato = datoJsonParse;
+                respuestaAPI.exito = true;
+                respuestaAPI.mensaje = respuestaPA.mensaje;
+            }else{
+                respuestaAPI.mensaje = respuestaPA.mensaje;
+            }
+
+            return respuestaAPI;
+        }catch (error){
+            await queryRunner.rollbackTransaction();
+            respuestaAPI.mensaje = 'Error al obtener las categorias del usuario: ' + error;
+            return respuestaAPI;
+        }finally{
+            await queryRunner.release();
+        }
+    }
+
     async crearCategoria(categoria: Categorias): Promise<RespuestaAPI<Categorias>> {
         let respuestaAPI: RespuestaAPI<Categorias> = {
             dato: new Categorias,
@@ -119,7 +159,7 @@ export class CategoriasService {
             );
 
             const [respuestaPA] = await queryRunner.query(
-                "SELECT @p_dato as dato, @p_exito as exito, @p_mensaje as mensaje"
+                "SELECT @p_exito as exito, @p_mensaje as mensaje"
             );
             if (respuestaPA.exito == '1') {
                 respuestaAPI.exito = true;
@@ -131,7 +171,7 @@ export class CategoriasService {
             return respuestaAPI;
         } catch (error) {
             await queryRunner.rollbackTransaction();
-            respuestaAPI.mensaje = 'Error al actualizar una categoria: ' + error
+            respuestaAPI.mensaje = 'Error al eliminar una categoria: ' + error
             return respuestaAPI;
         } finally {
             await queryRunner.release();
