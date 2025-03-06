@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, ParseDatePipe, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { IngresosUsuariosService } from './ingresos-usuarios.service';
-import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
+import { RespuestaAPI } from 'src/common/dtos/respuestaAPI.dto';
 import { JwtAuthGuard } from '../autenticacion/jwt-auth.guard';
 import { IngresosUsuario } from './dtos/ingresos-usuario.dto';
 

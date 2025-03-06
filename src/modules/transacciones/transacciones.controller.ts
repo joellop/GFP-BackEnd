@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseDatePipe, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 import { TransaccionesService } from './transacciones.service';
 import { Transaccion } from './dtos/transaccion.dto';
-import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
+import { RespuestaAPI } from 'src/common/dtos/respuestaAPI.dto';
 
 @Controller('transacciones')
 export class TransaccionesController {

@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ReglasPorcentualService } from './reglas-porcentual.service';
-import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
+import { RespuestaAPI } from 'src/common/dtos/respuestaAPI.dto';
 import { JwtAuthGuard } from '../autenticacion/jwt-auth.guard';
 import { ReglasPorcentualModel } from './dtos/reglas-porcentual.dto';
 

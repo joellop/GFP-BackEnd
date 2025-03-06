@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
+import { RespuestaAPI } from 'src/common/dtos/respuestaAPI.dto';
 import { DataSource, QueryRunner } from 'typeorm';
 import { Transaccion } from './dtos/transaccion.dto';
 

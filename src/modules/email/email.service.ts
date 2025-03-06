@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
-import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
+import { RespuestaAPI } from 'src/common/dtos/respuestaAPI.dto';
 import { EmailModel } from './dtos/email.dto';
 
 @Injectable()

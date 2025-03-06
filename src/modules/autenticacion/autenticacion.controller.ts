@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Put, Get } from '@nestjs/common';
 import { AutenticacionService } from './autenticacion.service';
-import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
+import { RespuestaAPI } from 'src/common/dtos/respuestaAPI.dto';
 import { UsuarioModelo } from '../usuario/dtos/usuario.dto';
 
 

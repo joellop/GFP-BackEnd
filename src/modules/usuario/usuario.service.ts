@@ -1,7 +1,7 @@
 
 import { Injectable } from '@nestjs/common';
 import { DataSource, QueryRunner } from 'typeorm';
-import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
+import { RespuestaAPI } from 'src/common/dtos/respuestaAPI.dto';
 import { UsuarioModelo } from './dtos/usuario.dto';
 import * as bcrypt from 'bcrypt'
 

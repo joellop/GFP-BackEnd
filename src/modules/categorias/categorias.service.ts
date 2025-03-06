@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, QueryRunner } from 'typeorm';
 import { Categorias } from './dtos/categoria.dto';
-import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
+import { RespuestaAPI } from 'src/common/dtos/respuestaAPI.dto';
 
 @Injectable()
 export class CategoriasService {

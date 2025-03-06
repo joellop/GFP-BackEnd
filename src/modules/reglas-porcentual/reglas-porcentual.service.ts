@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ReglasPorcentualModel } from './dtos/reglas-porcentual.dto';
-import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
+import { RespuestaAPI } from 'src/common/dtos/respuestaAPI.dto';
 import { DataSource, QueryRunner } from 'typeorm';
 
 @Injectable()

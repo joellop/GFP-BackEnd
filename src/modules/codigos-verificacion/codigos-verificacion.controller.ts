@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CodigosVerificacionService } from './codigos-verificacion.service';
-import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
+import { RespuestaAPI } from 'src/common/dtos/respuestaAPI.dto';
 import { CodigoVerificacion } from './dtos/codigo-verificacion.dto';
 
 

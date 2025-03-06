@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { DataSource, QueryRunner } from 'typeorm';
 import { CambioContrasena, UsuarioModelo } from '../usuario/dtos/usuario.dto';
-import { RespuestaAPI } from 'src/Modelos/respuestaAPI.model';
+import { RespuestaAPI } from 'src/common/dtos/respuestaAPI.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
