@@ -9,10 +9,9 @@ import * as bcrypt from 'bcrypt'
 export class UsuarioService {
     constructor(private dataSource: DataSource) { }
 
-    //Se realiza ejecucion del procedimiento almacenado [CrearActualizarUsuario] 
     async crearUsuario(usuario: UsuarioModelo): Promise<RespuestaAPI<UsuarioModelo>> {
-        const saltRounds = 10;
-        usuario.contrasena = await bcrypt.hash(usuario.contrasena, saltRounds);
+        usuario.contrasena = await bcrypt.hash(usuario.contrasena, 10);
+
         let respuestaApi: RespuestaAPI<UsuarioModelo> =
         {
             dato: new UsuarioModelo,
@@ -66,7 +65,7 @@ export class UsuarioService {
             return {
                 dato: null,
                 exito: false,
-                mensaje: 'Error: ' + error,
+                mensaje: 'Error al crear un usuario: ' + error,
             };
         } finally {
             await queryRunner.release();
@@ -121,7 +120,7 @@ export class UsuarioService {
             return {
                 dato: null,
                 exito: false,
-                mensaje: 'Error: ' + error,
+                mensaje: 'Error al actualizar un usuario: ' + error,
             };
         } finally {
             await queryRunner.release();
