@@ -10,6 +10,6 @@ export class UsuarioModelo {
 
 
 export class CambioContrasena {
-  nombre_email: string;
+  nombreEmail: string;
   contrasenaNueva: string;
 }

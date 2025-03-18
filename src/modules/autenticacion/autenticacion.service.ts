@@ -112,7 +112,7 @@ export class AutenticacionService {
 
     async cambiarContrasena(contrasena: CambioContrasena): Promise<RespuestaAPI<number>> {
         const saltRounds = 10;
-        const usuarioEncontrado = await this.validarUsuario(contrasena.nombre_email);
+        const usuarioEncontrado = await this.validarUsuario(contrasena.nombreEmail);
         if (usuarioEncontrado.exito) {
             let contrasenaHash = await bcrypt.hash(contrasena.contrasenaNueva, saltRounds);
             const queryRunner: QueryRunner = this.dataSource.createQueryRunner();

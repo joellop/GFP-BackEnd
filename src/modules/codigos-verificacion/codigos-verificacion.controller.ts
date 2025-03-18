@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { CodigosVerificacionService } from './codigos-verificacion.service';
 import { RespuestaAPI } from 'src/common/dtos/respuestaAPI.dto';
 import { CodigoVerificacion } from './dtos/codigo-verificacion.dto';
@@ -9,7 +9,7 @@ export class CodigosVerificacionController {
      constructor(private readonly codigosVerificacionService: CodigosVerificacionService) { }
 
      @Get('/GenerarCodigo/:usuarioId')
-     async generarCodigo(@Param('usuarioId') usuarioId: number): Promise<RespuestaAPI<CodigoVerificacion>>{
+     async generarCodigo(@Param('usuarioId', ParseIntPipe) usuarioId: number): Promise<RespuestaAPI<CodigoVerificacion>>{
       let resultado = await this.codigosVerificacionService.generarCodigo(usuarioId);
 
       return resultado;
