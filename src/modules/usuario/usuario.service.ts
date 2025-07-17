@@ -27,8 +27,8 @@ export class UsuarioService {
             await queryRunner.startTransaction();
 
             await queryRunner.query(
-                `CALL CrearActualizarUsuario(?, ?, ?, ?, ?, @p_dato, @p_exito, @p_mensaje);`,
-                [usuario.id, usuario.nombre, usuario.email, usuario.contrasena, false]
+                `CALL CrearActualizarUsuario(?, ?, ?, ?, @p_dato, @p_exito, @p_mensaje);`,
+                [usuario.id, usuario.nombre, usuario.email, usuario.contrasena]
             );
 
             const [respuestaPA] = await queryRunner.query(
@@ -85,8 +85,8 @@ export class UsuarioService {
             await queryRunner.startTransaction();
 
             await queryRunner.query(
-                `CALL CrearActualizarUsuario(?, ?, ?, ?, ?, @p_dato, @p_exito, @p_mensaje);`,
-                [usuario.id, usuario.nombre, usuario.email, usuario.contrasena, true]
+                `CALL CrearActualizarUsuario(?, ?, ?, ?, @p_dato, @p_exito, @p_mensaje);`,
+                [usuario.id, usuario.nombre, usuario.email, usuario.contrasena]
             );
 
             const [respuestaPA] = await queryRunner.query(
