@@ -8,11 +8,11 @@ export class CodigosVerificacionService {
     constructor(private dataSource: DataSource) { }
 
     //funcion para generar el codigo
-    async generarCodigo(usuarioId: number): Promise<RespuestaAPI<CodigoVerificacion>> {
+    async generarCodigo(usuarioId: number): Promise<RespuestaAPI<string>> {
 
-        let respuestaApi: RespuestaAPI<CodigoVerificacion> =
+        let respuestaApi: RespuestaAPI<string> =
         {
-            dato: new CodigoVerificacion,
+            dato: null,
             exito: false,
             mensaje: ''
         };
@@ -35,16 +35,7 @@ export class CodigosVerificacionService {
             await queryRunner.commitTransaction();
 
             if (respuestaPA.exito == '1') {
-                const datosJsonParse = JSON.parse(respuestaPA.dato);
-                respuestaApi.dato =
-                {
-                    id: datosJsonParse.id,
-                    usuarioId: datosJsonParse.usuarioId,
-                    codigo: datosJsonParse.codigo,
-                    fechaCreacion: datosJsonParse.fechaCreacion,
-                    fechaExpiracion: datosJsonParse.fechaExpiracion,
-                    usado: datosJsonParse.usado
-                };
+                respuestaApi.dato = JSON.parse(respuestaPA.dato);
                 respuestaApi.exito = true;
                 respuestaApi.mensaje = respuestaPA.mensaje;
             } else {

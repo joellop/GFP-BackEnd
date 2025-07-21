@@ -9,7 +9,7 @@ export class CodigosVerificacionController {
      constructor(private readonly codigosVerificacionService: CodigosVerificacionService) { }
 
      @Get('/GenerarCodigo/:usuarioId')
-     async generarCodigo(@Param('usuarioId', ParseIntPipe) usuarioId: number): Promise<RespuestaAPI<CodigoVerificacion>>{
+     async generarCodigo(@Param('usuarioId', ParseIntPipe) usuarioId: number): Promise<RespuestaAPI<string>>{
       let resultado = await this.codigosVerificacionService.generarCodigo(usuarioId);
 
       return resultado;
